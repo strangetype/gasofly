@@ -1,9 +1,8 @@
 import Matter from 'matter-js';
-import { GRAVITY } from '../constants/constants';
 
-function createMatterWorld() {
+function createMatterWorld(gravity: { x: number; y: number }) {
 	const engine = Matter.Engine.create({
-		gravity: GRAVITY,
+		gravity,
 	});
 
 	return engine;

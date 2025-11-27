@@ -1,9 +1,10 @@
 import { View } from '@/common/View';
 import labyrinthHtml from './labyrinth.html?raw';
 import './labyrinth.scss';
+import { LABIRYNTH_CELL_TYPE } from '@/common/types';
 
 interface LabyrinthData {
-	labyrinth: number[][];
+	labyrinth: LABIRYNTH_CELL_TYPE[][];
 	wallSize: number;
 }
 
@@ -23,7 +24,7 @@ export const Labyrinth = View(labyrinthHtml, (root, data?: LabyrinthData) => {
 	// Create wall divs based on labyrinth array
 	for (let y = 0; y < labyrinth.length; y++) {
 		for (let x = 0; x < labyrinth[y].length; x++) {
-			if (labyrinth[y][x] === 1) {
+			if (labyrinth[y][x] === 'w') {
 				const wall = document.createElement('div');
 				wall.className = 'labyrinth__wall';
 				wall.style.left = `${x * wallSize}px`;
