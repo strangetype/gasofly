@@ -1,0 +1,2 @@
+export { Labyrinth } from './labyrinth';
+

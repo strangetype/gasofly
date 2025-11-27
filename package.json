@@ -1,0 +1,27 @@
+{
+	"name": "gasofly",
+	"version": "1.0.0",
+	"description": "",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"preview": "vite preview",
+		"format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css,html}\""
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"packageManager": "pnpm@10.18.3",
+	"devDependencies": {
+		"@types/matter-js": "^0.20.2",
+		"@types/node": "^24.10.1",
+		"prettier": "^3.6.2",
+		"sass": "^1.94.2",
+		"typescript": "^5.9.3",
+		"vite": "^7.2.4"
+	},
+	"dependencies": {
+		"matter-js": "^0.20.0"
+	}
+}
