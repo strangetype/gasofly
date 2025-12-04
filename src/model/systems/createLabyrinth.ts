@@ -1,8 +1,9 @@
 import Matter from 'matter-js';
 import { LABIRYNTH_CELL_TYPE } from '@/common/types';
+import { cellToWorld } from '@/common/utils';
 
 export function createLabyrinth(
-	engine: Matter.Engine,
+	world: Matter.World,
 	labyrinth: LABIRYNTH_CELL_TYPE[][],
 	wallSize: number
 ) {
@@ -10,17 +11,16 @@ export function createLabyrinth(
 	const height = wallSize * labyrinth.length;
 	const width = wallSize * (labyrinth[0]?.length || 0);
 
-	const world = engine.world;
-
 	// Create static walls from labyrinth array
 	const walls: Matter.Body[] = [];
 	for (let y = 0; y < labyrinth.length; y++) {
 		for (let x = 0; x < labyrinth[y].length; x++) {
 			if (labyrinth[y][x] === 'w') {
 				// If cell is 1, create a wall
+				const wallPosition = cellToWorld(x, y, wallSize);
 				const wall = Matter.Bodies.rectangle(
-					x * wallSize + wallSize / 2,
-					y * wallSize + wallSize / 2,
+					wallPosition.x,
+					wallPosition.y,
 					wallSize,
 					wallSize,
 					{
@@ -56,5 +56,5 @@ export function createLabyrinth(
 
 	Matter.Composite.add(world, boundaries);
 
-	return { engine, world, width, height };
+	return { width, height };
 }

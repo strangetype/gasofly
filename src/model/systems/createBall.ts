@@ -1,5 +1,6 @@
 import Matter from 'matter-js';
 import { LABIRYNTH_CELL_TYPE } from '@/common/types';
+import { findFirstCellByType, cellToWorld } from '@/common/utils';
 
 export function createBall(
 	engine: Matter.Engine,
@@ -8,28 +9,20 @@ export function createBall(
 	radius: number
 ) {
 	// Find the cell with 'b' value in the labyrinth
-	let ballX = 0;
-	let ballY = 0;
-
-	for (let y = 0; y < labyrinth.length; y++) {
-		for (let x = 0; x < labyrinth[y].length; x++) {
-			if (labyrinth[y][x] === 'b') {
-				// Calculate position at the center of the cell (same as wall positioning)
-				ballX = x * wallSize + wallSize / 2;
-				ballY = y * wallSize + wallSize / 2;
-				break;
-			}
-		}
-	}
+	const ballCell = findFirstCellByType(labyrinth, 'b');
+	const ballPosition = ballCell ? cellToWorld(ballCell.x, ballCell.y, wallSize) : { x: 0, y: 0 };
 
 	// Create a dynamic circle body
-	const ballBody = Matter.Bodies.circle(ballX, ballY, radius, {
+	const ballBody = Matter.Bodies.circle(ballPosition.x, ballPosition.y, radius, {
 		restitution: 0.9, // Bouncy ball
 		friction: 0.005, // Low friction
-		frictionAir: 0.005, // Low air resistance
+		frictionAir: 0.01, // Low air resistance
 		frictionStatic: 0.5, // Static friction
 		density: 0.001, // Affects mass and how it responds to gravity
-		// No collisionFilter needed - default collision settings will work with walls
+		collisionFilter: {
+			category: 0x0001, // Default category (walls and other objects)
+			mask: 0xfff7, // Collide with everything except 0x0008 (rope segments)
+		},
 	});
 
 	// Add ball to the world

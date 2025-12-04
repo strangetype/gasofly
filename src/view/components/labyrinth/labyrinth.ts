@@ -1,11 +1,15 @@
 import { View } from '@/common/View';
 import labyrinthHtml from './labyrinth.html?raw';
 import './labyrinth.scss';
-import { LABIRYNTH_CELL_TYPE } from '@/common/types';
+import { LabyrinthStyle } from './labyrinthStyles';
+
+// Экспортируем тип для использования в других модулях
+export type { LabyrinthStyle };
 
 interface LabyrinthData {
-	labyrinth: LABIRYNTH_CELL_TYPE[][];
+	labyrinth: number[][];
 	wallSize: number;
+	style?: LabyrinthStyle; // По умолчанию 'default'
 }
 
 export const Labyrinth = View(labyrinthHtml, (root, data?: LabyrinthData) => {
@@ -16,7 +20,7 @@ export const Labyrinth = View(labyrinthHtml, (root, data?: LabyrinthData) => {
 		return;
 	}
 
-	const { labyrinth, wallSize } = data;
+	const { labyrinth, wallSize, style = 'default' } = data;
 
 	// Clear previous walls
 	container.innerHTML = '';
@@ -24,9 +28,9 @@ export const Labyrinth = View(labyrinthHtml, (root, data?: LabyrinthData) => {
 	// Create wall divs based on labyrinth array
 	for (let y = 0; y < labyrinth.length; y++) {
 		for (let x = 0; x < labyrinth[y].length; x++) {
-			if (labyrinth[y][x] === 'w') {
+			if (labyrinth[y][x] === 1) {
 				const wall = document.createElement('div');
-				wall.className = 'labyrinth__wall';
+				wall.className = `labyrinth__wall labyrinth__wall--${style}`;
 				wall.style.left = `${x * wallSize}px`;
 				wall.style.top = `${y * wallSize}px`;
 				wall.style.width = `${wallSize}px`;

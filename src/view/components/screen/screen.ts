@@ -2,83 +2,94 @@ import { View } from '@/common/View';
 import screenHtml from './screen.html?raw';
 import './screen.scss';
 
-export const Screen = View(
-	screenHtml,
-	(root) => {
-		const content = root.querySelector('.screen__content') as HTMLElement;
-		const camera = root.querySelector('.screen__camera') as HTMLElement;
+export const Screen = createScreen();
 
-		// Целевые значения камеры [x, y, zoom]
-		const targetCamera = [0, 0, 1];
-		// Текущие значения камеры (для плавной интерполяции)
-		const currentCamera = [0, 0, 1];
+function createScreen() {
+	// Общие переменные для mount и unmount
+	let resizeObserver: ResizeObserver | null = null;
 
-		// Коэффициент плавности (чем меньше, тем плавнее)
-		const smoothness = 0.1;
+	return View(
+		screenHtml,
+		(root) => {
+			const content = root.querySelector('.screen__content') as HTMLElement;
+			const camera = root.querySelector('.screen__camera') as HTMLElement;
+			const ui = root.querySelector('.screen__ui') as HTMLElement;
 
-		let animationFrameId: number | null = null;
+			// Целевые значения камеры [x, y, zoom]
+			const targetCamera = [0, 0, 1];
+			// Текущие значения камеры (для плавной интерполяции)
+			const currentCamera = [0, 0, 1];
 
-		function updateCameraTransform() {
-			// Интерполяция текущих значений к целевым
+			// Коэффициент плавности (увеличен для быстрой интерполяции)
+			const smoothness = 0.15;
+
+			// Кэшированные размеры для оптимизации (избегаем reflow)
+			let cachedCenterX = content.clientWidth / 2;
+			let cachedCenterY = content.clientHeight / 2;
+
+			// Обновляем кэш размеров при resize
+			resizeObserver = new ResizeObserver(() => {
+				cachedCenterX = content.clientWidth / 2;
+				cachedCenterY = content.clientHeight / 2;
+			});
+			resizeObserver.observe(content);
+
+			// Флаг для отслеживания необходимости обновления
 			let needsUpdate = false;
 
-			for (let i = 0; i < 3; i++) {
-				const diff = targetCamera[i] - currentCamera[i];
-				if (Math.abs(diff) > 0.001) {
-					currentCamera[i] += diff * smoothness;
-					needsUpdate = true;
-				} else {
-					currentCamera[i] = targetCamera[i];
+			function updateCameraTransform() {
+				// Интерполяция текущих значений к целевым
+				needsUpdate = false;
+
+				for (let i = 0; i < 3; i++) {
+					const diff = targetCamera[i] - currentCamera[i];
+					if (Math.abs(diff) > 0.001) {
+						currentCamera[i] += diff * smoothness;
+						needsUpdate = true;
+					} else {
+						currentCamera[i] = targetCamera[i];
+					}
 				}
+
+				// Применяем трансформацию используя кэшированные размеры
+				const translateX = cachedCenterX - currentCamera[0] * currentCamera[2];
+				const translateY = cachedCenterY - currentCamera[1] * currentCamera[2];
+
+				camera.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentCamera[2]})`;
 			}
 
-			// Вычисляем центр screen__content
-			const centerX = content.clientWidth / 2;
-			const centerY = content.clientHeight / 2;
+			function setCameraPoint(x: number, y: number) {
+				targetCamera[0] = x;
+				targetCamera[1] = y;
+			}
 
-			// Применяем трансформацию: сначала масштабируем, потом сдвигаем
-			// Чтобы точка (x, y) оказалась в центре, нужно:
-			// translateX = centerX - x * zoom
-			// translateY = centerY - y * zoom
-			const translateX = centerX - currentCamera[0] * currentCamera[2];
-			const translateY = centerY - currentCamera[1] * currentCamera[2];
+			function setCameraZoom(zoom: number) {
+				targetCamera[2] = zoom;
+			}
 
-			camera.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentCamera[2]})`;
+			// Метод для внешнего вызова обновления (из основного цикла рендеринга)
+			function updateCameraFrame() {
+				updateCameraTransform();
+			}
 
-			// Продолжаем анимацию, если есть изменения
-			if (needsUpdate) {
-				animationFrameId = requestAnimationFrame(updateCameraTransform);
-			} else {
-				animationFrameId = null;
+			// Начальная установка камеры
+			updateCameraTransform();
+
+			return {
+				content,
+				camera,
+				ui,
+				setCameraPoint,
+				setCameraZoom,
+				updateCameraFrame,
+			};
+		},
+		() => {
+			// Отписка от слушателей при размонтировании
+			if (resizeObserver) {
+				resizeObserver.disconnect();
+				resizeObserver = null;
 			}
 		}
-
-		function startAnimation() {
-			if (animationFrameId === null) {
-				animationFrameId = requestAnimationFrame(updateCameraTransform);
-			}
-		}
-
-		function setCameraPoint(x: number, y: number) {
-			targetCamera[0] = x;
-			targetCamera[1] = y;
-			startAnimation();
-		}
-
-		function setCameraZoom(zoom: number) {
-			targetCamera[2] = zoom;
-			startAnimation();
-		}
-
-		// Начальная установка камеры
-		updateCameraTransform();
-
-		return {
-			content,
-			camera,
-			setCameraPoint,
-			setCameraZoom,
-		};
-	},
-	() => {}
-);
+	);
+}

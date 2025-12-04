@@ -8,7 +8,7 @@ interface BallData {
 
 export const Ball = View<
 	{
-		setPosition: (x: number, y: number) => void;
+		setPosition: (x: number, y: number, rotation: number) => void;
 	},
 	BallData
 >(ballHtml, (root, data?: BallData) => {
@@ -28,13 +28,13 @@ export const Ball = View<
 	ballElement.style.height = `${radius * 2}px`;
 
 	// Method to update ball position
-	function setPosition(x: number, y: number) {
+	function setPosition(x: number, y: number, rotation: number) {
 		// Center the ball at the given coordinates
-		ballElement.style.transform = `translate(${x - radius}px, ${y - radius}px)`;
+		ballElement.style.transform = `translate(${x - radius}px, ${y - radius}px) rotate(${rotation}rad)`;
 	}
 
 	// Initial position at (0, 0)
-	setPosition(0, 0);
+	setPosition(0, 0, 0);
 
 	return {
 		setPosition,

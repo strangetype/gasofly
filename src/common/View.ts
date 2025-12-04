@@ -16,7 +16,24 @@ export function View<Component, Data>(
 		};
 	}
 
+	function append(root: HTMLElement, data?: Data) {
+		const element = document.createElement('div');
+		element.innerHTML = html;
+		const component = build(element, data);
+		function _unmount() {
+			unmount(element);
+			element.innerHTML = '';
+			element.remove();
+		}
+		root.appendChild(element);
+		return {
+			unmount: _unmount,
+			...component,
+		};
+	}
+
 	return {
+		append,
 		mount,
 	};
 }

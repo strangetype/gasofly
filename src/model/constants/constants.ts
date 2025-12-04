@@ -6,6 +6,6 @@ export const FIRST_LEVEL_LABYRINTH: LABIRYNTH_CELL_TYPE[][] = [
 	['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
 	['w', 'e', 'e', 'e', 'w', 'e', 'e', 'e', 'e', 'w'],
 	['w', 'e', 'w', 'e', 'e', 'e', 'w', 'e', 'e', 'w'],
-	['w', 'b', 'e', 'e', 'w', 'e', 'e', 'e', 'e', 'w'],
+	['w', 'b', 'e', 'e', 'w', 'e', 'e', 'e', 'c', 'w'],
 	['w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w', 'w'],
 ];

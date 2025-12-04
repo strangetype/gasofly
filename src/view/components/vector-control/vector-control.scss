@@ -1,0 +1,15 @@
+.vector-control {
+	width: 140px;
+	height: 70px;
+	background: rgba(0, 0, 0, 0.5);
+	border-radius: 140px 140px 0 0;
+	border: 2px solid rgba(255, 255, 255, 0.4);
+	border-bottom: none;
+	overflow: hidden;
+	cursor: pointer;
+	user-select: none;
+	touch-action: none;
+	position: relative;
+	box-sizing: border-box;
+}
+
