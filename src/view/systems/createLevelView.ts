@@ -3,7 +3,7 @@ import { VectorControl } from '../components/vector-control/vector-control';
 import { Ball } from '../components/ball/ball';
 import { Labyrinth } from '../components/labyrinth/labyrinth';
 import { Screen } from '../components/screen/screen';
-import { LABIRYNTH_CELL_TYPE } from '@/common/types';
+import { LABYRINTH_CELL_TYPE } from '@/common/types';
 import { getBodyDimensions } from '@/common/utils';
 import { Cubes } from '../components/cubes/cubes';
 import { Rope } from '../components/rope/rope';
@@ -11,7 +11,7 @@ import { TapControl } from '../components/tap-control/tap-control';
 
 export function createLevelView(
 	appElement: HTMLElement,
-	labyrinth: LABIRYNTH_CELL_TYPE[][],
+	labyrinth: LABYRINTH_CELL_TYPE[][],
 	wallSize: number,
 	ballRadius: number,
 	cubes: Matter.Body[],

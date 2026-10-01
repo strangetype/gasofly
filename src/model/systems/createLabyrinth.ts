@@ -1,10 +1,10 @@
 import Matter from 'matter-js';
-import { LABIRYNTH_CELL_TYPE } from '@/common/types';
+import { LABYRINTH_CELL_TYPE } from '@/common/types';
 import { cellToWorld } from '@/common/utils';
 
 export function createLabyrinth(
 	world: Matter.World,
-	labyrinth: LABIRYNTH_CELL_TYPE[][],
+	labyrinth: LABYRINTH_CELL_TYPE[][],
 	wallSize: number
 ) {
 	// Calculate world dimensions

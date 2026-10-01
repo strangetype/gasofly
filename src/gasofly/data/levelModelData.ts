@@ -1,4 +1,5 @@
-import { LABYRINTH_CELL_TYPE } from '@/common/types';
+import { LABYRINTH_CELL_TYPE } from '../types/types';
+import Matter from 'matter-js';
 
 export interface Data {
 	level: number;
@@ -14,10 +15,10 @@ export interface Data {
 	gravity: { x: number; y: number };
 	ball: { x: number; y: number; radius: number; RigidBody: Matter.Body | null; maxPower: number };
 	rope: { segments: Matter.Body[]; constraints: Matter.Constraint[] };
-	controls: { vector: [number, number] };
+	controls: { vector: [number, number]; catch: boolean };
 }
 
-export const data: Data = {
+export const levelModelData: Data = {
 	level: 0,
 	score: 0,
 	health: 100,
@@ -31,5 +32,5 @@ export const data: Data = {
 	gravity: { x: 0, y: 1 },
 	ball: { x: 0, y: 0, radius: 64, RigidBody: null, maxPower: 0.03 },
 	rope: { segments: [], constraints: [] },
-	controls: { vector: [0, 0] },
+	controls: { vector: [0, 0], catch: false },
 };

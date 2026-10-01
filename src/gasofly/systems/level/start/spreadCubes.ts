@@ -1,19 +1,9 @@
-import { LABYRINTH_CELL_TYPE } from '@/common/types';
-import {
-	shuffleArray,
-	getMinDistance,
-	Position,
-	findCellsByType,
-	cellToWorld,
-} from '@/common/utils';
-import Matter from 'matter-js';
+import { createLevelSystem } from '../levelSystem';
 
-export function spreadCubes(
-	_world: Matter.World,
-	cubes: Matter.Body[],
-	labyrinth: LABYRINTH_CELL_TYPE[][],
-	wallSize: number
-) {
+export default createLevelSystem((data, { Utils, Matter }) => {
+	const { cubes, labyrinth, wallSize } = data;
+	const { shuffleArray, getMinDistance, findCellsByType, cellToWorld } = Utils;
+
 	// Найти все ячейки 'c' для размещения кубов
 	const cubePositions = findCellsByType(labyrinth, 'c');
 
@@ -38,7 +28,7 @@ export function spreadCubes(
 		const emptyPositions = findCellsByType(labyrinth, 'e');
 
 		// Позиции уже размещенных кубов
-		const placedPositions: Position[] = cubePositions.slice(0, cubeIndex);
+		const placedPositions: Utils.Position[] = cubePositions.slice(0, cubeIndex);
 
 		// Размещаем оставшиеся кубы на максимальном удалении
 		while (cubeIndex < cubes.length && emptyPositions.length > 0) {
@@ -68,4 +58,4 @@ export function spreadCubes(
 			cubeIndex++;
 		}
 	}
-}
+});
