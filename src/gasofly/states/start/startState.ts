@@ -3,7 +3,7 @@ import { createState } from '../gasolfyStateMachine';
 
 const startState = createState(
 	'start',
-	'level',
+	'common',
 	(entities) => {
 		return (callback) => {
 			const int = entities.Timer.interval(() => {
@@ -14,7 +14,10 @@ const startState = createState(
 		};
 	},
 	(entities) => {
-		if (entities.data.level.counter > 128) return 'ready';
+		if (entities.data.level.counter > 128) {
+			entities.data.common.isReady = true;
+			return 'ready';
+		}
 		return null;
 	}
 );

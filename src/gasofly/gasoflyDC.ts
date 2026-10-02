@@ -1,12 +1,12 @@
 import DC from '@/common/DC';
 import SystemsEngine from '@/common/SystemsEngine';
 import { constants } from './constants/constants';
-import { levelModelData } from './data/levelModelData';
 import Matter from 'matter-js';
 import * as Utils from './services/utils';
 import { State } from '@/common/State';
 import Timer from './services/timer/Timer';
 import StateMachine from '@/common/StateMachine';
+import modelData from './data/modelData';
 
 const gasoflyDC = DC({
 	StateMachine,
@@ -15,9 +15,7 @@ const gasoflyDC = DC({
 	Matter,
 	Utils,
 	Timer,
-	data: {
-		level: levelModelData,
-	},
+	data: modelData,
 	constants,
 });
 
@@ -27,7 +25,7 @@ export const createStateMachine = gasoflyDC.create((entities) => {
 
 	type DataKeys = keyof typeof data;
 
-	function createEngine(dataType: DataKeys) {
+	function createEngine<Data extends DataKeys>(dataType: Data) {
 		return SystemsEngine(data[dataType], {
 			Matter,
 			Utils,
@@ -38,9 +36,9 @@ export const createStateMachine = gasoflyDC.create((entities) => {
 	function _createStateMachine<States extends { [stateName: string]: string }>() {
 		const { linkState, setState } = StateMachine<States>();
 		type State = keyof States;
-		function createState<StateName extends State>(
+		function createState<StateName extends State, DataType extends DataKeys>(
 			stateName: StateName,
-			dataType: DataKeys,
+			dataType: DataType,
 			createTicker: (ent: Entities) => (callback: () => void) => () => void,
 			exitCondition: (ent: Entities) => States[StateName] | null
 		) {

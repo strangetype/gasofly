@@ -8,8 +8,6 @@ export default createLevelSystem((data, { Matter }) => {
 	const tap = controls.catch;
 	const cube = data.catchedCube;
 
-	console.log('cube: ', !!cube, 'tap: ', tap);
-
 	if (!cube) {
 		if (!rope.isExtending && controls.catch) {
 			controls.catch = false;
@@ -17,8 +15,6 @@ export default createLevelSystem((data, { Matter }) => {
 		return;
 	}
 	if (!tap) return;
-
-	console.log('RELEASE');
 
 	const constraints = Matter.Composite.allConstraints(engine!.world);
 	const connectionConstraint = constraints.find(

@@ -1,7 +1,9 @@
-import { LevelState } from './states/LevelState';
+//import { LevelState } from './states/LevelState';
 
-const app = document.querySelector<HTMLDivElement>('#app');
+import runStartState from './gasofly/states/start/startState';
+import runViewStartState from './gasofly/view/states/start/startViewState';
 
-const levelExitCode = await LevelState(app!);
+//const app = document.querySelector<HTMLDivElement>('#app');
 
-console.log(levelExitCode);
+runStartState();
+runViewStartState();

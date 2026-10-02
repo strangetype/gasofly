@@ -9,6 +9,9 @@ export interface Data {
 	engine: Matter.Engine | null;
 	runner: Matter.Runner | null;
 	cubes: Matter.Body[];
+	cubesTargetScheme: {
+		center: { x: number; y: number };
+	};
 	catchedCube: Matter.Body | false;
 	labyrinth: LABYRINTH_CELL_TYPE[][];
 	wallSize: number;
@@ -33,6 +36,9 @@ export const levelModelData: Data = {
 	engine: null,
 	runner: null,
 	cubes: [],
+	cubesTargetScheme: {
+		center: { x: 0, y: 0 },
+	},
 	catchedCube: false,
 	labyrinth: [['e']],
 	wallSize: 256,

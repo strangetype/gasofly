@@ -1,41 +1,48 @@
 import DC from '@/common/DC';
-import { levelModelData } from '../data/levelModelData';
 import { State } from '@/common/State';
 import StateMachine from '@/common/StateMachine';
 import SystemsEngine from '@/common/SystemsEngine';
 import Timer from '../services/timer/Timer';
 import { constants } from '../constants/constants';
+import components from './components/components';
+import modelData from '../data/modelData';
+import animationTicker from './services/animationTicker';
+import * as Utils from '../services/utils';
 
 const gasolfyViewDC = DC({
 	constants,
-	data: {
-		common: {},
-		levelModelData,
-	},
+	data: modelData,
+	components,
 	State,
 	StateMachine,
 	SystemsEngine,
 	Timer,
+	animationTicker,
+	Utils,
 });
 
-export const createStateMachine = gasolfyViewDC.create((entities) => {
+export const createViewStateMachine = gasolfyViewDC.create((entities) => {
 	type Entities = typeof entities;
-	const { SystemsEngine, data, State, StateMachine } = entities;
+	const { SystemsEngine, data, components, State, StateMachine, Utils } = entities;
 
 	type DataKeys = keyof typeof data;
 
-	function createEngine(dataType: DataKeys) {
-		return SystemsEngine(data[dataType], {
-			constants,
-		});
+	function createEngine<Data extends DataKeys>(dataType: Data) {
+		return SystemsEngine(
+			{ data: data[dataType], components },
+			{
+				constants,
+				Utils,
+			}
+		);
 	}
 
 	function _createStateMachine<States extends { [stateName: string]: string }>() {
 		const { linkState, setState } = StateMachine<States>();
 		type State = keyof States;
-		function createState<StateName extends State>(
+		function createState<StateName extends State, Data extends DataKeys>(
 			stateName: StateName,
-			dataType: DataKeys,
+			dataType: Data,
 			createTicker: (ent: Entities) => (callback: () => void) => () => void,
 			exitCondition: (ent: Entities) => States[StateName] | null
 		) {
@@ -57,9 +64,9 @@ export const createStateMachine = gasolfyViewDC.create((entities) => {
 							const clearTicker = ticker(() => {
 								sEngine.update();
 								const exitCode = exitCondition(entities);
-								console.log(exitCode);
 								if (exitCode !== null) {
 									clearTicker();
+									console.log('exitCode: ', exitCode);
 									resolve(exitCode);
 								}
 							});

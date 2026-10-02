@@ -1,0 +1,18 @@
+import { addViewLevelSystem } from './levelViewState';
+import createLevelView from './systems/createLevelView';
+import linkControls from './systems/linkControls';
+import renderBall from './systems/renderBall';
+import renderCamera from './systems/renderCamera';
+import renderCubes from './systems/renderCubes';
+import renderMarker from './systems/renderMarker';
+import renderRope from './systems/renderRope';
+import updateControls from './systems/updateControls';
+
+addViewLevelSystem('start', createLevelView);
+addViewLevelSystem('start', linkControls);
+addViewLevelSystem('cycle', renderCamera);
+addViewLevelSystem('cycle', renderCubes);
+addViewLevelSystem('cycle', renderBall);
+addViewLevelSystem('cycle', renderRope);
+addViewLevelSystem('cycle', renderMarker);
+addViewLevelSystem('cycle', updateControls);

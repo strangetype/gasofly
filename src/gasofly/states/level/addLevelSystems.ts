@@ -12,6 +12,7 @@ import checkSquareFilled from './systems/cycle/checkSquareFilled';
 import ropeActivitySystem from './systems/cycle/ropeActivitySystem';
 import checkRopeCatchSystem from './systems/cycle/checkRopeCatchSystem';
 import releaseRopeCatchSystem from './systems/cycle/releaseRopeCatchSystem';
+import updateCubesTargetScheme from './systems/cycle/updateCubesTargetScheme';
 
 // Порядок важен: createBall должен создать тело до createBallRope
 addLevelSystem('start', generateLabyrinth);
@@ -28,5 +29,7 @@ addLevelSystem('cycle', updateBallThrust);
 addLevelSystem('cycle', ropeActivitySystem);
 addLevelSystem('cycle', checkRopeCatchSystem);
 addLevelSystem('cycle', releaseRopeCatchSystem);
+
+addLevelSystem('cycle', updateCubesTargetScheme);
 
 addLevelSystem('cycle', checkSquareFilled);
