@@ -2,6 +2,7 @@ import { LABYRINTH_CELL_TYPE } from '../types/types';
 import Matter from 'matter-js';
 
 export interface Data {
+	counter: number;
 	level: number;
 	score: number;
 	health: number;
@@ -14,11 +15,18 @@ export interface Data {
 	cubeSize: number;
 	gravity: { x: number; y: number };
 	ball: { x: number; y: number; radius: number; RigidBody: Matter.Body | null; maxPower: number };
-	rope: { segments: Matter.Body[]; constraints: Matter.Constraint[] };
+	rope: {
+		segments: Matter.Body[];
+		constraints: Matter.Constraint[];
+		targetLength: number;
+		isActive: boolean;
+		isExtending: boolean;
+	};
 	controls: { vector: [number, number]; catch: boolean };
 }
 
 export const levelModelData: Data = {
+	counter: 0,
 	level: 0,
 	score: 0,
 	health: 100,
@@ -31,6 +39,6 @@ export const levelModelData: Data = {
 	cubeSize: 64,
 	gravity: { x: 0, y: 1 },
 	ball: { x: 0, y: 0, radius: 64, RigidBody: null, maxPower: 0.03 },
-	rope: { segments: [], constraints: [] },
+	rope: { segments: [], constraints: [], targetLength: 0, isActive: false, isExtending: false },
 	controls: { vector: [0, 0], catch: false },
 };

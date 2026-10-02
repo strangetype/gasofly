@@ -1,0 +1,118 @@
+import { createLevelSystem } from '../../levelState';
+
+export default createLevelSystem((data, { Matter, Utils }) => {
+	const wallSize = data.wallSize;
+	const labyrinth = data.labyrinth;
+
+	const world = data.engine!.world;
+
+	// Calculate world dimensions
+	const height = wallSize * labyrinth.length;
+	const width = wallSize * (labyrinth[0]?.length || 0);
+
+	// Create static walls from labyrinth array
+	const walls: Matter.Body[] = [];
+	for (let y = 0; y < labyrinth.length; y++) {
+		for (let x = 0; x < labyrinth[y].length; x++) {
+			if (labyrinth[y][x] === 'w') {
+				// If cell is 1, create a wall
+				const wallPosition = Utils.cellToWorld(x, y, wallSize);
+				const wall = Matter.Bodies.rectangle(
+					wallPosition.x,
+					wallPosition.y,
+					wallSize,
+					wallSize,
+					{
+						isStatic: true,
+						collisionFilter: {
+							group: -1, // Negative group means bodies in this group don't collide with each other
+						},
+					}
+				);
+				walls.push(wall);
+			}
+		}
+	}
+
+	// Add walls to the world
+	Matter.Composite.add(world, walls);
+
+	// Create impassable world boundaries
+	const boundaries = [
+		// Top
+		Matter.Bodies.rectangle(width / 2, -25, width, 50, { isStatic: true }),
+		// Bottom
+		Matter.Bodies.rectangle(width / 2, height + 25, width, 50, {
+			isStatic: true,
+		}),
+		// Left
+		Matter.Bodies.rectangle(-25, height / 2, 50, height, { isStatic: true }),
+		// Right
+		Matter.Bodies.rectangle(width + 25, height / 2, 50, height, {
+			isStatic: true,
+		}),
+	];
+
+	Matter.Composite.add(world, boundaries);
+
+	//return { width, height };
+});
+
+/*
+export function createLabyrinth(
+    world: Matter.World,
+    labyrinth: LABYRINTH_CELL_TYPE[][],
+    wallSize: number
+) {
+    // Calculate world dimensions
+    const height = wallSize * labyrinth.length;
+    const width = wallSize * (labyrinth[0]?.length || 0);
+
+    // Create static walls from labyrinth array
+    const walls: Matter.Body[] = [];
+    for (let y = 0; y < labyrinth.length; y++) {
+        for (let x = 0; x < labyrinth[y].length; x++) {
+            if (labyrinth[y][x] === 'w') {
+                // If cell is 1, create a wall
+                const wallPosition = cellToWorld(x, y, wallSize);
+                const wall = Matter.Bodies.rectangle(
+                    wallPosition.x,
+                    wallPosition.y,
+                    wallSize,
+                    wallSize,
+                    {
+                        isStatic: true,
+                        collisionFilter: {
+                            group: -1, // Negative group means bodies in this group don't collide with each other
+                        },
+                    }
+                );
+                walls.push(wall);
+            }
+        }
+    }
+
+    // Add walls to the world
+    Matter.Composite.add(world, walls);
+
+    // Create impassable world boundaries
+    const boundaries = [
+        // Top
+        Matter.Bodies.rectangle(width / 2, -25, width, 50, { isStatic: true }),
+        // Bottom
+        Matter.Bodies.rectangle(width / 2, height + 25, width, 50, {
+            isStatic: true,
+        }),
+        // Left
+        Matter.Bodies.rectangle(-25, height / 2, 50, height, { isStatic: true }),
+        // Right
+        Matter.Bodies.rectangle(width + 25, height / 2, 50, height, {
+            isStatic: true,
+        }),
+    ];
+
+    Matter.Composite.add(world, boundaries);
+
+    return { width, height };
+}
+*/

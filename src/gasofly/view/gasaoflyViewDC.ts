@@ -1,36 +1,31 @@
 import DC from '@/common/DC';
-import SystemsEngine from '@/common/SystemsEngine';
-import { constants } from './constants/constants';
-import { levelModelData } from './data/levelModelData';
-import Matter from 'matter-js';
-import * as Utils from './services/utils';
+import { levelModelData } from '../data/levelModelData';
 import { State } from '@/common/State';
-import Timer from './services/timer/Timer';
 import StateMachine from '@/common/StateMachine';
+import SystemsEngine from '@/common/SystemsEngine';
+import Timer from '../services/timer/Timer';
+import { constants } from '../constants/constants';
 
-const gasoflyDC = DC({
-	StateMachine,
-	State,
-	SystemsEngine,
-	Matter,
-	Utils,
-	Timer,
-	data: {
-		level: levelModelData,
-	},
+const gasolfyViewDC = DC({
 	constants,
+	data: {
+		common: {},
+		levelModelData,
+	},
+	State,
+	StateMachine,
+	SystemsEngine,
+	Timer,
 });
 
-export const createStateMachine = gasoflyDC.create((entities) => {
+export const createStateMachine = gasolfyViewDC.create((entities) => {
 	type Entities = typeof entities;
-	const { SystemsEngine, data, Matter, Utils, State, StateMachine } = entities;
+	const { SystemsEngine, data, State, StateMachine } = entities;
 
 	type DataKeys = keyof typeof data;
 
 	function createEngine(dataType: DataKeys) {
 		return SystemsEngine(data[dataType], {
-			Matter,
-			Utils,
 			constants,
 		});
 	}
@@ -62,6 +57,7 @@ export const createStateMachine = gasoflyDC.create((entities) => {
 							const clearTicker = ticker(() => {
 								sEngine.update();
 								const exitCode = exitCondition(entities);
+								console.log(exitCode);
 								if (exitCode !== null) {
 									clearTicker();
 									resolve(exitCode);

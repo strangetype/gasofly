@@ -49,6 +49,18 @@ export const VectorControl = View(
 			}
 		}
 
+		function normilizeVector() {
+			const x = vector[0];
+			const y = vector[1];
+			const l = Math.sqrt(x * x + y * y);
+			if (l <= 0) {
+				vector[0] = vector[1] = 0;
+			} else {
+				vector[0] = x / l;
+				vector[1] = y / l;
+			}
+		}
+
 		function handlePointerDown(event: PointerEvent) {
 			event.preventDefault();
 			calculateVector(event.clientX, event.clientY);
@@ -72,11 +84,63 @@ export const VectorControl = View(
 			vector[1] = 0;
 		}
 
+		const keysPressed = {
+			ArrowUp: 0,
+			ArrowLeft: 0,
+			ArrowRight: 0,
+		};
+
+		function handleKeyDown(event: KeyboardEvent) {
+			const key = event.key;
+
+			switch (key) {
+				case 'ArrowUp':
+					keysPressed.ArrowUp = -1;
+					break;
+				case 'ArrowLeft':
+					keysPressed.ArrowLeft = -1;
+					break;
+				case 'ArrowRight':
+					keysPressed.ArrowRight = 1;
+					break;
+			}
+
+			vector[0] = keysPressed.ArrowLeft + keysPressed.ArrowRight;
+			vector[1] = keysPressed.ArrowUp;
+
+			normilizeVector();
+		}
+
+		function handleKeyUp(event: KeyboardEvent) {
+			// Сброс вектора при отпускании
+			const key = event.key;
+
+			switch (key) {
+				case 'ArrowUp':
+					keysPressed.ArrowUp = 0;
+					break;
+				case 'ArrowLeft':
+					keysPressed.ArrowLeft = 0;
+					break;
+				case 'ArrowRight':
+					keysPressed.ArrowRight = 0;
+					break;
+			}
+
+			vector[0] = keysPressed.ArrowLeft + keysPressed.ArrowRight;
+			vector[1] = keysPressed.ArrowUp;
+
+			normilizeVector();
+		}
+
 		// Добавляем слушатели событий
 		control.addEventListener('pointerdown', handlePointerDown);
 		control.addEventListener('pointermove', handlePointerMove);
 		control.addEventListener('pointerup', handlePointerUp);
 		control.addEventListener('pointercancel', handlePointerUp);
+
+		window.addEventListener('keydown', handleKeyDown);
+		window.addEventListener('keyup', handleKeyUp);
 
 		// Сохраняем ссылки на обработчики для удаления в unmount
 		(control as any)._handlers = {
