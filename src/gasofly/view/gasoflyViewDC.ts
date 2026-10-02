@@ -65,6 +65,7 @@ export const createViewStateMachine = gasolfyViewDC.create((entities) => {
 								sEngine.update();
 								const exitCode = exitCondition(entities);
 								if (exitCode !== null) {
+									console.log('clearTicker: ', clearTicker);
 									clearTicker();
 									console.log('exitCode: ', exitCode);
 									resolve(exitCode);

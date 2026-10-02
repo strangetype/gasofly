@@ -5,7 +5,7 @@ import { Rectangle } from '@/gasofly/services/utils';
 export default createLevelSystem((data, { Matter, Utils }) => {
 	const world = data.engine!.world;
 	const cubeSize = data.cubeSize;
-	const size = 2; // The size of the final square in units
+	const size = data.fullCubeSize; // The size of the final square in units
 
 	// Generate rectangles by splitting the square
 	const rectangles: Rectangle[] = [];

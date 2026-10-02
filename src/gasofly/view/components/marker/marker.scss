@@ -4,4 +4,14 @@
 	pointer-events: none;
 	z-index: 100;
 	will-change: transform;
+
+	&__scheme {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		border: 2px solid rgba(255, 0, 0, 0.8);
+		box-sizing: border-box;
+		pointer-events: none;
+	}
 }

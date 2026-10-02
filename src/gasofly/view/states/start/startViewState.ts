@@ -8,7 +8,10 @@ const startState = createViewState(
 		return entities.animationTicker;
 	},
 	(ents) => {
-		if (ents.data.common.isReady) return 'ready';
+		if (ents.data.common.isReady) {
+			ents.data.common.isReady = false;
+			return 'ready';
+		}
 		return null;
 	}
 );

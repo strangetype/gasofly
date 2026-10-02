@@ -8,11 +8,12 @@ import createCubes from './systems/start/createCubes';
 import spreadCubes from './systems/start/spreadCubes';
 import runWorld from './systems/start/runWorld';
 import updateBallThrust from './systems/cycle/updateBallThrust';
-import checkSquareFilled from './systems/cycle/checkSquareFilled';
 import ropeActivitySystem from './systems/cycle/ropeActivitySystem';
 import checkRopeCatchSystem from './systems/cycle/checkRopeCatchSystem';
 import releaseRopeCatchSystem from './systems/cycle/releaseRopeCatchSystem';
 import updateCubesTargetScheme from './systems/cycle/updateCubesTargetScheme';
+import checkCubeAssembly from './systems/cycle/checkCubeAssembly';
+import finalizeLevelSystem from './systems/end/finalizeLevelSystem';
 
 // Порядок важен: createBall должен создать тело до createBallRope
 addLevelSystem('start', generateLabyrinth);
@@ -31,5 +32,6 @@ addLevelSystem('cycle', checkRopeCatchSystem);
 addLevelSystem('cycle', releaseRopeCatchSystem);
 
 addLevelSystem('cycle', updateCubesTargetScheme);
+addLevelSystem('cycle', checkCubeAssembly);
 
-addLevelSystem('cycle', checkSquareFilled);
+addLevelSystem('end', finalizeLevelSystem);

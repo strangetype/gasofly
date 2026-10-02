@@ -5,6 +5,7 @@ import Matter from 'matter-js';
 import * as Utils from './services/utils';
 import { State } from '@/common/State';
 import Timer from './services/timer/Timer';
+import RandomService from './services/random/RandomService';
 import StateMachine from '@/common/StateMachine';
 import modelData from './data/modelData';
 
@@ -15,13 +16,16 @@ const gasoflyDC = DC({
 	Matter,
 	Utils,
 	Timer,
+	RandomService,
+	Math,
 	data: modelData,
 	constants,
 });
 
 export const createStateMachine = gasoflyDC.create((entities) => {
 	type Entities = typeof entities;
-	const { SystemsEngine, data, Matter, Utils, State, StateMachine } = entities;
+	const { SystemsEngine, data, Matter, Utils, State, StateMachine, RandomService, Math } =
+		entities;
 
 	type DataKeys = keyof typeof data;
 
@@ -30,6 +34,8 @@ export const createStateMachine = gasoflyDC.create((entities) => {
 			Matter,
 			Utils,
 			constants,
+			RandomService,
+			Math,
 		});
 	}
 

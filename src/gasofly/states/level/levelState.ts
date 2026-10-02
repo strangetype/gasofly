@@ -11,7 +11,10 @@ const levelState = createState(
 			};
 		};
 	},
-	() => {
+	(ents) => {
+		if (ents.data.level.levelState === 'win') {
+			return 'win';
+		}
 		return null;
 	}
 );

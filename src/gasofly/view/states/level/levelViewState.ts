@@ -7,6 +7,9 @@ const levelState = createViewState(
 		return entities.animationTicker;
 	},
 	(ents) => {
+		if (ents.data.level.levelState === 'win') {
+			return 'win';
+		}
 		return null;
 	}
 );

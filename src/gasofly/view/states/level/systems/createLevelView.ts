@@ -14,7 +14,7 @@ export default createViewLevelSystem(({ components, data }, { Utils }) => {
 		appElement,
 	} = components;
 
-	const { labyrinth, wallSize, cubes, rope, ball } = data;
+	const { labyrinth, wallSize, cubes, rope, ball, fullCubeSize, cubeSize } = data;
 	const ropeSegments = rope.segments;
 	const ballRadius = ball.radius;
 
@@ -57,6 +57,7 @@ export default createViewLevelSystem(({ components, data }, { Utils }) => {
 
 	const marker = Marker.append(labyrinthView.container, {
 		size: 16,
+		schemeSize: fullCubeSize * cubeSize,
 	});
 
 	components.view = {

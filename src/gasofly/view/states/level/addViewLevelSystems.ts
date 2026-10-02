@@ -7,6 +7,7 @@ import renderCubes from './systems/renderCubes';
 import renderMarker from './systems/renderMarker';
 import renderRope from './systems/renderRope';
 import updateControls from './systems/updateControls';
+import destroyLevelView from './systems/destroyLevelView';
 
 addViewLevelSystem('start', createLevelView);
 addViewLevelSystem('start', linkControls);
@@ -16,3 +17,4 @@ addViewLevelSystem('cycle', renderBall);
 addViewLevelSystem('cycle', renderRope);
 addViewLevelSystem('cycle', renderMarker);
 addViewLevelSystem('cycle', updateControls);
+addViewLevelSystem('end', destroyLevelView);
